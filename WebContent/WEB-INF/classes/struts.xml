@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+    <package name="default" namespace="/" extends="struts-default">
+    	<!-- 登录 -->
+    	<action name="login_*" class="loginAction" method="{1}">
+    		<result name="titlePage">/WEB-INF/viewPage/title/title.jsp</result>
+    		<result name="leftPage">/WEB-INF/viewPage/left/left.jsp</result>
+    		<result name="mainPage">/WEB-INF/viewPage/main/main.jsp</result>
+    		<result name="loginPage">/WEB-INF/viewPage/main/login.jsp</result>
+    		
+    		<result name="sclassinfoPage">/WEB-INF/viewPage/sclass/info.jsp</result>
+    	</action>
+    	
+    	<!-- 班级 -->
+    	<action name="sclass_*" class="sclassAction" method="{1}">
+    		<result name="infoPage">/WEB-INF/viewPage/sclass/info.jsp</result>
+    	</action>
+    	
+    	<!-- 学生 -->
+    	<action name="student_*" class="studentAction" method="{1}">
+    		<result name="infoPage">/WEB-INF/viewPage/student/info.jsp</result>
+    		<result name="resultPage">/WEB-INF/viewPage/student/result.jsp</result>
+    		<result name="updateGradePage">/WEB-INF/viewPage/student/gradein.jsp</result>
+    	</action>
+    	
+    	<!-- 课程 -->
+    	<action name="course_*" class="courseAction" method="{1}">
+    		<result name="infoPage">/WEB-INF/viewPage/course/info.jsp</result>
+    		<result name="resultPage">/WEB-INF/viewPage/course/result.jsp</result>
+    	</action>
+    	
+    	
+    </package>
+</struts>

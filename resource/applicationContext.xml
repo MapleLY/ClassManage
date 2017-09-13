@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!--注入的顺序 jdbc.properties->dataSource->sessionFactory->dao->service->junit->action -->
+
+	<context:property-placeholder location="classpath:jdbc.properties" />
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!-- 加载映射文件 -->
+		<!-- 使用要求：1.前缀classpath*,任意编译路径 2通配符* -->
+		<property name="mappingLocations" value="classpath*:com/maple/system/domain/*.hbm.xml" />
+		<property name="hibernateProperties">
+			<value>
+				hibernate.show_sql=true
+				hibernate.hbm2ddl.auto=update
+				hibernate.dialect=org.hibernate.dialect.MySQLDialect
+			</value>
+		</property>
+	</bean>
+	<!-- **************dao************** -->
+	<bean id="studentDao" class="com.maple.system.dao.Impl.StudentDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	<bean id="sclassDao" class="com.maple.system.dao.Impl.SclassDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	<bean id="sgradeDao" class="com.maple.system.dao.Impl.SgradeDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	<bean id="courseDao" class="com.maple.system.dao.Impl.CourseDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<!-- **************service************** -->
+	<bean id="loginService" class="com.maple.system.service.Impl.LoginServiceImpl">
+		<property name="studentDao" ref="studentDao"/>
+	</bean>
+	<bean id="sclassService" class="com.maple.system.service.Impl.SclassServiceImpl">
+		<property name="sclassDao" ref="sclassDao"/>
+	</bean>
+	<bean id="studentService" class="com.maple.system.service.Impl.StudentServiceImpl">
+		<property name="studentDao" ref="studentDao"/>
+		<property name="sgradeDao" ref="sgradeDao"/>
+		<property name="courseDao" ref="courseDao"/>
+	</bean>
+	<bean id="courseService" class="com.maple.system.service.Impl.CourseServiceImpl">
+		<property name="courseDao" ref="courseDao"/>
+		<property name="sgradeDao" ref="sgradeDao"/>
+	</bean>
+	
+	
+	<!-- **************web.action************** -->
+	<bean id="loginAction" class="com.maple.system.web.login.LoginAction">
+		<property name="loginService" ref="loginService"></property>
+	</bean>
+	<bean id="sclassAction" class="com.maple.system.web.main.SclassAction">
+		<property name="sclassService" ref="sclassService"></property>
+	</bean>
+	<bean id="studentAction" class="com.maple.system.web.main.StudentAction">
+		<property name="studentService" ref="studentService"></property>
+	</bean>
+	<bean id="courseAction" class="com.maple.system.web.main.CourseAction">
+		<property name="courseService" ref="courseService"></property>
+	</bean>
+	
+
+</beans>

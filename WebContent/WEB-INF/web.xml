@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+  <display-name>ManaClassSystem</display-name>
+  
+  <context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:applicationContext.xml</param-value>
+	</context-param>
+
+	<!-- 加入一个监听器：初始化spring容器 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+  
+  	<!-- OpenSessionInViewFilter的过滤器 ：最前面 -->
+	<filter>
+		<filter-name>OpenSessionInViewFilter</filter-name>
+		<filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
+		<!-- 如果修改默认的sessionFactory，必须添加一个初始化的参数 -->
+		<!-- <init-param> -->
+		<!-- <param-name>sessionFactoryBeanName</param-name> -->
+		<!-- <param-name>mySessionFactory</param-name> -->
+		<!-- </init-param> -->
+	</filter>
+
+	<filter-mapping>
+		<filter-name>OpenSessionInViewFilter</filter-name>
+		<!-- *.css,*.js,*.png访问OpenSessionInViewFilter -->
+		<!-- OpenSessionInViewFilter只处理动态请求 -->
+		<url-pattern>*.action</url-pattern>
+	</filter-mapping>
+  
+  
+  <!-- 配置核心控制器 -->
+    <filter>
+        <filter-name>struts2</filter-name>
+        <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>struts2</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+</web-app>

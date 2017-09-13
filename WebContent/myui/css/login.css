@@ -1,0 +1,15 @@
+/* 登录大div */
+.allBox{
+	margin-top: 240px;
+	margin-left:500px;
+	margin-right:500px;
+}
+
+/* 账户密码div */
+.textBox{
+	margin-right:100px;
+}
+
+.submitBox{
+	margin-left:120px;
+}
